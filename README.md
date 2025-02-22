@@ -1,65 +1,17 @@
-# aspect-ratio-calculator-vs-code-extension README
+# Aspect ratio calculator VS Code extension
 
-This is the README for your extension "aspect-ratio-calculator-vs-code-extension". After writing up a brief description, we recommend including the following sections.
+De Aspect ratio calculator VS code extensie kan op basis van de width en height, dichtstbijzijnde aspect ratio berekenen. Dit werkt in zowel CSS als in React.
 
-## Features
+Selecteer je React code met de aspect ratio, bijvoorbeeld `340 / 760`.
+Voer `Command + shift + P` uit en klik op Calculate Aspect Ratio.
+Hierna kan je door op de button te klikken de width en heigth vervangen voor de correcte aspect ratio
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+In CSS kan je `width: 560px; height: 840px;`deze selectie maken en vervangen voor de aspect ratio.
 
-For example if there is an image subfolder under your extension project workspace:
+## Installeren in VSCode
+1. Ga naar je `Extensions` sidebar.
+2. Druk rechtsboven op de `…`-icon.
+3. Klik op `Install from VSIX…`.
+4. Zoek in de file-explorer die opent naar `/dist/extension.vsix` in deze repository.
 
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
-
-## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
-
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+<img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExbmllZjcwaXdmY2hwaTVldWp5NTkzODBsaWlyY3Y3ODlzcGxzemhtNiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/c5eqVJN7oNLTq/giphy.gif" alt="" />
