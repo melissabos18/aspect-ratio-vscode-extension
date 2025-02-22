@@ -1,11 +1,16 @@
 {
-  "name": "aspect-ratio-calculator-vs-code-extension",
-  "displayName": "Aspect ratio calculator vs code extension",
+  "name": "aspect-ratio-calculator",
+  "displayName": "Aspect ratio calculator VSCode Extension",
   "description": "",
   "version": "0.0.1",
+  "publisher": "Melissa",
   "engines": {
-    "vscode": "^1.97.0"
+    "vscode": "^1.96.0"
   },
+  "repository": {
+		"type": "git",
+		"url": "https://github.com/melissabos18/aspect-ratio-vscode-extension.git"
+	},
   "categories": [
     "Other"
   ],
@@ -13,20 +18,21 @@
   "main": "./extension.js",
   "contributes": {
     "commands": [{
-      "command": "aspect-ratio-calculator-vs-code-extension.helloWorld",
-      "title": "Hello World"
+      "command": "aspect-ratio-calculator.calculateAspectRatio",
+      "title": "Calculate Aspect Ratio"
     }]
   },
   "scripts": {
     "lint": "eslint .",
     "pretest": "yarn run lint",
-    "test": "vscode-test"
+    "test": "vscode-test",
+    "package": "vsce package --out dist/extension.vsix"
   },
   "devDependencies": {
-    "@types/vscode": "^1.97.0",
+    "@types/vscode": "^1.96.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
-    "eslint": "^9.19.0",
+    "eslint": "^9.16.0",
     "@vscode/test-cli": "^0.0.10",
     "@vscode/test-electron": "^2.4.1"
   }

@@ -9,25 +9,124 @@ const vscode = require('vscode');
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
+	const disposable = vscode.commands.registerCommand('aspect-ratio-calculator.calculateAspectRatio', function () {
+		const editor = vscode.window.activeTextEditor
+		if (!editor) {
+			vscode.window.showErrorMessage("No active editor find")
+			return
+		}
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "aspect-ratio-calculator-vs-code-extension" is now active!');
+		const document = editor.document;
+		if (!['babel', 'postcss', 'javascript'].includes(document.languageId)) {
+			vscode.window.showErrorMessage("This only works in a Babel JavaScript or PostCSS file.")
+			return
+		}
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with  registerCommand
-	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand('aspect-ratio-calculator-vs-code-extension.helloWorld', function () {
-		// The code you place here will be executed every time your command is executed
+		if (document.languageId === "postcss") {
+			getCSSAspectRatio()
+		}
 
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from Aspect ratio calculator vs code extension!');
-	});
+		if (document.languageId === "javascript") {
+			getReactAspectRatio()
+		}
 
-	context.subscriptions.push(disposable);
+		function getReactAspectRatio() {
+			const selection = editor.selection
+			const text = document.getText(selection)
+
+			const regex = /(\d+)\s*\/\s*(\d+)/
+
+			const formatValue = text.match(regex)
+
+			if (!formatValue) {
+				vscode.window.showErrorMessage("Select both values for calculating the aspect ratio, example: 400 / 500")
+				return
+			}
+
+			const width = formatValue[1]
+			const height = formatValue[2]
+			const aspectRatio = getNearestNormalAspectRatio(width, height)
+
+			getInformationMessage({
+				selection,
+				aspectRatio,
+				replaceMessage: aspectRatio
+			})
+		}
+
+		function getCSSAspectRatio() {
+			const selection = editor.selection
+			const text = document.getText(selection)
+
+			const widthMatch = text.match(/width:\s*(\d+)px/)
+			const heightMatch = text.match(/height:\s*(\d+)px/)
+
+			if (!widthMatch || !heightMatch) {
+				vscode.window.showErrorMessage("Select two css rules with both width and height properties")
+				return
+			}
+
+			const width = widthMatch ? widthMatch[1] : null
+			const height = heightMatch ? heightMatch[1] : null
+
+			if (width === null || height === null) {
+				vscode.window.showErrorMessage('There is no calculation possible for these values')
+				return
+			}
+
+			const aspectRatio = getNearestNormalAspectRatio(width, height)
+			getInformationMessage({
+				selection,
+				aspectRatio,
+				replaceMessage: `aspect-ratio: ${aspectRatio};`
+			})
+		}
+
+		function getInformationMessage({selection, aspectRatio, replaceMessage}) {
+			return (
+				vscode.window.showInformationMessage(
+					`Aspect ratio is: ${aspectRatio}`,
+					'Yes replace the width and height',
+				).then(select => {
+					if (select === 'Yes replace the width and height') {
+						editor.edit(editBuilder => {
+							editBuilder.replace(selection, replaceMessage)
+						})
+					}
+				})
+			)
+		}
+
+		function getNearestNormalAspectRatio(width, height, side = 1, maxW = 10, maxH = 10) {
+			const ratio = width / height
+			const ratios = new Set()
+
+			for (let w = 1; w <= maxW; w++) {
+				for (let h = 1; h <= maxH; h++) {
+						ratios.add(`${w} / ${h}`)
+				}
+			}
+
+			return [...ratios].reduce((best, current) => {
+				const [w, h] = current.split('/').map(Number);
+				const currentRatio = w / h
+
+				if (!best) return current;
+				const bestRatio = best.split('/').map(Number).reduce((a, b) => a / b)
+
+				const isBetter =
+					(!side && Math.abs(ratio - currentRatio) < Math.abs(ratio - bestRatio)) ||
+					(side < 0 && currentRatio <= ratio && Math.abs(ratio - currentRatio) < Math.abs(ratio - bestRatio)) ||
+					(side > 0 && currentRatio >= ratio && Math.abs(ratio - currentRatio) < Math.abs(ratio - bestRatio))
+
+				return isBetter ? current : best;
+			}, null)
+		}
+	})
+
+	context.subscriptions.push(disposable)
 }
 
-// This method is called when your extension is deactivated
 function deactivate() {}
 
 module.exports = {
